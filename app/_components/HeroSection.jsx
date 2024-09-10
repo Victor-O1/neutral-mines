@@ -50,7 +50,7 @@ const HeroSection = () => {
             >
                 <CarouselContent>
                     {heroImages.map((img) => (
-                        <CarouselItem> <Image src={img.imgUrl} alt={img.alt} key={img.alt} width={1920} height={1080} className="object-contain" /></CarouselItem>
+                        <CarouselItem key={img.imgUrl}> <Image src={img.imgUrl} alt={img.alt} key={img.alt} width={1920} height={1080} className="object-contain" /></CarouselItem>
                     ))}
 
                 </CarouselContent>
