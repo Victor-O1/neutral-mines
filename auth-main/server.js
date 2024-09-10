@@ -13,27 +13,28 @@ const flash = require("express-flash")
 const session = require("express-session")
 const methodOverride = require("method-override")
 const mongoose = require('mongoose')
-const dbURI="mongodb://localhost:27017/MINE_DETAILS";
-const User=require('./models/User');
+const dbURI = process.env.MONDODB_URI;
+const cors = require("cors")
+const User = require("../lib/models/User.js");
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('MongoDB connected...'))
-  .catch(err => console.log(err));
+    .then(() => console.log('MongoDB connected...'))
+    .catch(err => console.log(err));
 
 initializePassport(passport)
 
 
-const sessionSecret= process.env.SESSION_SECRET;
+const sessionSecret = process.env.SESSION_SECRET;
 const users = []
 
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({ extended: false }))
 app.use(flash())
 app.use(session({
     secret: sessionSecret,
     resave: false, // We wont resave the session variable if nothing is changed
     saveUninitialized: true,
-    cookie:{secure:false}
+    cookie: { secure: false }
 }))
-app.use(passport.initialize()) 
+app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride("_method"))
 
@@ -57,7 +58,7 @@ app.post("/register", checkNotAuthenticated, async (req, res) => {
         await newUser.save();
         console.log("User registered:", newUser); // Display newly registered in the console
         res.redirect("/login")
-        
+
     } catch (e) {
         console.log(e);
         res.redirect("/register")
@@ -66,7 +67,7 @@ app.post("/register", checkNotAuthenticated, async (req, res) => {
 
 // Routes
 app.get('/', checkAuthenticated, (req, res) => {
-    res.render("index.ejs", {name: req.user.name})
+    res.render("index.ejs", { name: req.user.name })
 })
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
@@ -90,21 +91,21 @@ app.delete("/logout", (req, res) => {
     })
 })
 
-function checkAuthenticated(req, res, next){
-    if(req.isAuthenticated()){
+function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
         return next()
     }
     res.redirect("/login")
 }
 
-function checkNotAuthenticated(req, res, next){
-    if(req.isAuthenticated()){
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
         return res.redirect("/")
     }
     next()
 }
 
-app.listen(3000,()=>{
+app.listen(5000, () => {
     console.log('Server is running on port 3000');
 
 });

@@ -30,11 +30,16 @@ export const POST = async (request) => {
         //     }
         // });
 
-        await connectDB();
+        await connectDB(); //DB is connnected
 
-        const body = await request.json();
+        const body = await request.json();  // the req body is obtained
         const { name, companyName, location, governmentId, environmentalLicenseNumber } = body;
 
+        const existingUser = await User.findOne({ governmentId });
+
+        if (existingUser) {
+            return new NextResponse(JSON.stringify({ error: 'Government ID already exists.' }), { status: 400 });
+        }
         // Create a new user in the database
         const newUser = await User.create({
             name,

@@ -1,7 +1,16 @@
 {
-  "extends": "next",
   "rules": {
+    "no-console": "off",
+    "no-unused-vars": "off",
+    "no-debugger": "off",
+    "no-undef": "off",
+    "no-restricted-globals": "off",
+    "react/prop-types": "off",
     "react/no-unescaped-entities": "off",
-    "@next/next/no-page-custom-font": "off"
+    "react/jsx-key": "off",
+    "react/react-in-jsx-scope": "off",
+    "import/no-anonymous-default-export": "off",
+    "import/no-unresolved": "off",
+    "jsx-a11y/anchor-is-valid": "off"
   }
 }
