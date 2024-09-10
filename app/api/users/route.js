@@ -30,24 +30,28 @@ export const POST = async (request) => {
         //     }
         // });
 
-        await connectDB(); //DB is connnected
 
-        const body = await request.json();  // the req body is obtained
-        const { name, companyName, location, governmentId, environmentalLicenseNumber } = body;
+        //DB is connnected
+        await connectDB();
 
+        // the req body is obtained
+        const body = await request.json();
+        const { name, companyName, location, governmentId, environmentalLicenseNumber, dashboard } = body;
+
+        // check if the user is present in the DB, if yes, pass the error
         const existingUser = await User.findOne({ governmentId });
-
         if (existingUser) {
             return new NextResponse(JSON.stringify({ error: 'Government ID already exists.' }), { status: 400 });
         }
-        // Create a new user in the database
+        // if no, create a new user in the database
         const newUser = await User.create({
             name,
             companyName,
             location,
             governmentId,
             environmentalLicenseNumber,
-            data: { token: "jwt-token", userName: name }
+            dashboard,
+            // data: { token: "jwt-token", userName: name }
         });
 
         // Generate a fake token for demonstration

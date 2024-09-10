@@ -11,6 +11,7 @@
     "react/react-in-jsx-scope": "off",
     "import/no-anonymous-default-export": "off",
     "import/no-unresolved": "off",
-    "jsx-a11y/anchor-is-valid": "off"
+    "jsx-a11y/anchor-is-valid": "off",
+    "parser": "babel-eslint"
   }
 }
