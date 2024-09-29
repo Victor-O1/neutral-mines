@@ -65,12 +65,85 @@ export const POST = async (request) => {
         });
 
         // Setting cookie headers
-        response.cookies.set('token', token, { httpOnly: true, maxAge: 60 * 60 * 24 * 7 });
-        response.cookies.set('userName', newUser.name, { maxAge: 60 * 60 * 24 * 7 });
-        response.cookies.set('userName', newUser, { maxAge: 60 * 60 * 24 * 7 });
+        // response.cookies.set('token', token, { httpOnly: true, maxAge: 60 * 60 * 24 * 7 });
+        // response.cookies.set('userName', newUser.name, { maxAge: 60 * 60 * 24 * 7 });
+        response.cookies.set('_id', newUser._id, { maxAge: 60 * 60 * 24 * 7 });
 
         return response;
     } catch (e) {
         return new NextResponse(JSON.stringify({ error: "Error in creating user (POST) " + e.message }), { status: 500 });
     }
 }
+
+
+// export const PUT = async (request) => {
+//     try {
+//         const body = await request.json();
+//         await connectDB();
+//         const { dashboard, _id } = body;
+//         const existingUser = await User.findByIdAndUpdate(_id, { $set: { dashboard } });
+//         if (existingUser) {
+//             console.log(existingUser);
+//         }
+//         else {
+//             return new NextResponse(JSON.stringify({ error: 'User not found.' }), { status: 400 });
+//         }
+//     }
+
+//     catch (e) {
+//         console.log("Error in updating user (PUT) " + e.message, { status: 500 });
+//     }
+// }
+
+// export const PUT = async (request) => {
+//     try {
+//         await connectDB(); // Connect to MongoDB
+
+//         const body = await request.json(); // Parse the request body
+//         const { _id, updates } = body; // Destructure the _id and updates from the body
+
+//         // Check if _id is provided
+//         if (!_id) {
+//             return new NextResponse(JSON.stringify({ error: 'User ID not provided' }), { status: 400 });
+//         }
+
+//         // Update user by ID and apply the new dashboard data
+//         const updatedUser = await User.findByIdAndUpdate(_id, { $set: updates }, { new: true });
+
+//         // If user is not found, return a 404 response
+//         if (!updatedUser) {
+//             return new NextResponse(JSON.stringify({ error: 'User not found' }), { status: 404 });
+//         }
+
+//         // Return success response with the updated user data
+//         return new NextResponse(JSON.stringify({
+//             message: 'User updated successfully!',
+//             user: updatedUser,
+//         }), { status: 200 });
+//     } catch (error) {
+//         return new NextResponse(JSON.stringify({
+//             error: 'Error updating user: ' + error.message,
+//         }), { status: 500 });
+//     }
+// };
+
+
+export const PUT = async (request) => {
+    try {
+        await connectDB();
+        // const { _id, dashboard } = req.body;
+        // Get the data from the request body
+        const { _id, dashboard } = await request.json();
+
+        // Update the user by pushing the new dashboard entry to the dashboard array
+        const updatedUser = await User.findByIdAndUpdate(
+            _id, // User's ID
+            { $push: { dashboard: dashboard } }, // Push the new entry
+            { new: true } // Return the updated user
+        );
+
+        return new NextResponse(JSON.stringify(updatedUser), { status: 200 });
+    } catch (error) {
+        return new NextResponse(JSON.stringify({ error: error.message }), { status: 500 });
+    }
+};

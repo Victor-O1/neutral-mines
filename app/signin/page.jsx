@@ -34,12 +34,12 @@ export default function Login() {
     };
 
     return (
-        <div className="background-radial-gradient relative min-h-screen flex items-center justify-center p-4">
+        <div className="backgroundadial-gradient relative min-h-screen flex items-center justify-center p-4">
             {/* Background shapes */}
             <div id="radius-shape-1" className="absolute rounded-full"></div>
             <div id="radius-shape-2" className="absolute rounded-full"></div>
 
-            <div className="bg-glass p-10 rounded-lg shadow-lg max-w-md w-full">
+            <div className="bg-glas p-10 rounded-lg shadow-lg max-w-md w-full">
                 <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* Government ID Field */}
@@ -62,7 +62,7 @@ export default function Login() {
                         {loading ? "Logging in..." : "Login"}
                     </Button>
                     <div>
-                        Don't have an account <Link href="/signup">Sign Up</Link>
+                        Don't have an account <Link href="/signup" className="underline bold">Sign Up</Link>
                     </div>
                 </form>
             </div>

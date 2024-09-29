@@ -21,6 +21,12 @@ const schema = z.object({
     environmentalLicenseNumber: z.string().min(1, { message: "License number is required" }),
 });
 
+const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+};
+
 export default function Signup() {
     const {
         register,
@@ -39,25 +45,13 @@ export default function Signup() {
     const [licenseNumber, setlicenseNumber] = useState(null)
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [userId, setuserId] = useState(null)
 
     const onSubmit = async (data) => {
         setLoading(true);
         setError(null);
 
-        // try {
-        //     const response = await axios.post("http://localhost:3000/api/users", data);
 
-        //     // Store cookies (you can store tokens or user info)
-        //     Cookies.set("token", response.data.token, { expires: 7 }); // 7 days expiry
-        //     Cookies.set("userName", response.data.user.name, { expires: 7 });
-
-        //     alert("Sign up successful!");
-        // } catch (err) {
-        //     console.error("Sign-up error", err);
-        //     setError("Failed to sign up. Please try again.");
-        // } finally {
-        //     setLoading(false);
-        // }
         try {
             const response = await fetch('http://localhost:3000/api/users', {
                 method: 'POST',
@@ -73,11 +67,25 @@ export default function Signup() {
                     },
                     governmentId: governmentId,
                     environmentalLicenseNumber: licenseNumber,
+                    // dashboard: dashboard
                 }),
             });
+
             const data = await response.json();
+
+            // if (data.user){
+            //     setuserId(data.user._id);
+            // }
+
+            const id = getCookie('_id');
+            if (id) {
+                setuserId(id);
+                console.log(id);
+
+            }
             if (data.error) {
-                throw new error("n");
+                alert("Error: " + data.error);
+                return;
             }
             console.log('Response:', data);
             // Store cookies (you can store tokens or user info)
@@ -85,6 +93,7 @@ export default function Signup() {
             // Cookies.set("userName", response.data.user.name, { expires: 7 });
 
             alert("Sign up successful!");
+
         } catch (err) {
             console.error("Sign-up error", err);
             setError("Failed to sign up. Please try again.");
@@ -95,12 +104,12 @@ export default function Signup() {
     };
 
     return (
-        <div className="background-radial-gradient relative min-h-screen flex items-center justify-center p-4">
+        <div className="backgroundradial-gradient relative min-h-screen flex items-center justify-center p-4">
             {/* Background shapes */}
             <div id="radius-shape-1" className="absolute rounded-full"></div>
             <div id="radius-shape-2" className="absolute rounded-full"></div>
 
-            <div className="bg-glass p-10 rounded-lg shadow-lg max-w-md w-full">
+            <div className="bg-glas p-10 rounded-lg shadow-lg max-w-md w-full">
                 <h2 className="text-2xl font-bold text-center mb-6">Sign Up</h2>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* Name Field */}
@@ -160,15 +169,15 @@ export default function Signup() {
                         {loading ? "Signing Up..." : "Sign Up"}
                     </Button>
                     <div>
-                        Already have an account <Link href="/login">Sign In</Link>
+                        Already have an account <Link href="/signin" className="underline bold">Sign In</Link>
                     </div>
                     <div onClick={(e) => {
 
                         setname("Priyesh Kumar Jha");
                         setcompany("GreenCoal Plant")
                         setplace("Bangalore, India")
-                        setlongitude(12.9716);
-                        setlatitude(77.5946)
+                        setlongitude(77.5946);
+                        setlatitude(12.9716)
                         setgovernmentId("GOV12345678")
                         setlicenseNumber("ELN98765432")
                     }}>.</div>

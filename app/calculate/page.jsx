@@ -12,11 +12,23 @@ import CalendarEl from './_components/calender'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import Energy from './_components/energy'
-import { TreeDeciduous, TreePalm } from 'lucide-react'
+import { Earth, TreeDeciduous, TreePalm } from 'lucide-react'
 import PieChart from './_components/PieChart'
+import axios from 'axios'
+import { redirect } from 'next/navigation'
+// import { useRouter } from 'next/router'
+
+const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+};
+
+
 
 
 const Calculation = () => {
+    // const router = useRouter()
     const [emission, setemission] = useState({})
     const [emissionnum, setemissionnum] = useState(0)
     const [tonnes, settonnes] = useState(null)
@@ -24,7 +36,69 @@ const Calculation = () => {
     const [date, setdate] = useState({})
     const [diff, setdiff] = useState(null)
 
+    const putter = async () => {
+        try {
+            const id = getCookie('_id');
+            const response = await axios.put('http://localhost:3000/api/users', {
+                _id: id,  // Replace with the actual user ID
+                dashboard: {
+                    date: [date.from, date.to],
+                    emissions: {
+                        extraction: emission.extraction * tonnes,
+                        processing: emission.processing * tonnes,
+                        transportation: emission.transportation * km,
+                        blasting: emission.blasting * tonnes,
+                        handling: emission.handling * tonnes
+                    }
 
+
+                }
+            });
+            console.log('Update successful:', response.data);
+            // router.push("/")
+            // redirect("/dashboard")
+            // const response = await fetch('http://localhost:3000/api/users', {
+            //     method: 'PUT',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({
+            //         id: getCookie(id),
+            //         // name: name,
+            //         // companyName: company,
+            //         // location: {
+            //         //     place: place,
+            //         //     coordinates: [latitude, longitude],
+            //         // },
+            //         // governmentId: governmentId,
+            //         // environmentalLicenseNumber: licenseNumber,
+            //         dashboard: {
+            //             date: [date[0], date[1]],
+            //             emissions: {
+            //                 extraction: emission.extraction,
+            //                 processing: emission.processing,
+            //                 transportation: emission.transportation,
+            //                 blasting: emission.blasting,
+            //                 handling: emission.handling
+            //             }
+            //         }
+
+            //     }),
+            // })
+
+            // const data = await response.json();
+
+            // if (data) {
+            //     console.log("yay");
+            // }
+            // else {
+            //     console.log("dashboard not working");
+            // }
+        } catch (e) {
+            console.log(e)
+        }
+
+    }
     useEffect(() => {
         console.log(emission)
         setemissionnum(Math.round((((isNaN(emission.extraction) ? 0 : emission.extraction) * tonnes) + ((isNaN(emission.transportation) ? 0 : emission.transportation) * km) + ((isNaN(emission.processing)) ? 0 : emission.processing) + ((isNaN(emission.blasting) ? 0 : emission.blasting) * tonnes) + ((isNaN(emission.handling) ? 0 : emission.handling) * tonnes) + ((isNaN(emission.energy) ? 0 : emission.energy) * tonnes)) * 1000) / 1000)
@@ -39,21 +113,26 @@ const Calculation = () => {
 
 
 
-        <div className="flex flex-row lg:flex-col align-center justify-center p-4 pt-5">
-            <div className="flex  w-full h-[350px] overflow-clip">
+        <div className="flex flex-col  align-center justify-center p-4 pt-5">
+            <div className="flex flex-col lg:flex-row w-full h-[350px] overflow-clip gap-3">
                 <div className="flex flex-col text-7xl">
-                    LET'S GO NET ZERO
-                    <span className='text-red-400'> Calculate</span> your emissions
+                    Let's Save Earth 🌎
+                    <span></span>
+                    <span className='text-red-400 my-5'> LETS GO NET <span className='text-red-600'>ZERO</span></span>
                 </div>
                 <div>
-                    <Image src="/images/coal_mine1.jpg" alt="coal_mine1" width={1920} height={1080} className="object-contain" />
+                    <Image src="/images/coal_mine2.jpg" alt="coal_mine1" width={1920} height={1080} className="object-contain" />
                 </div>
             </div>
 
-            <div className="flex flex-col md:flex-row gap-3 m-5 mt-10">
+            <div className="flex lg:flex flex-col md:flex-row gap-3 m-5 mt-10">
 
 
-                <form className="flex flex-col w-[80vw] max-w-[800px] p-10 py-16 gap-5  " onSubmit={(e) => e.preventDefault()}>
+                <form className="flex flex-col w-[80vw] max-w-[800px] p-10 py-16 gap-5"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        putter()
+                    }}>
                     <Label htmlFor="extraction" className="text-red-500">Extraction</Label>
                     <div className="flex gap-4">
                         <Extraction emission={emission} setemission={setemission} className="py-2" />

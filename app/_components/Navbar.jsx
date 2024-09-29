@@ -12,9 +12,12 @@ import { useTheme } from 'next-themes'
 import { usePathname } from 'next/navigation'
 import menu from "../../public/menu.svg"
 import ham from "../../public/ham.png"
+import Cookies from "js-cookie";
+
 
 
 const Navbar = () => {
+    const user = Cookies.get("_id")
     const pathname = usePathname()
     const { theme, setTheme } = useTheme()
     const [isOpen, setisOpen] = useState(false)
@@ -39,9 +42,10 @@ const Navbar = () => {
                 <div className={`xl:flex xl:w-auto gap-9 text-3xl p-[50px] hidden`}>
                     <Link href="/mines" className={`hover:text-red-500 ${pathname === "/mines" ? "text-red-500" : ""}`}>Mines</Link>
                     <Link href="/calculate" className={`hover:text-red-500 ${pathname === "/calculate" ? "text-red-500" : ""}`}>Calculate</Link>
-                    <Link href="/about" className={`hover:text-red-500 ${pathname === "/about" ? "text-red-500" : ""}`}>About Us</Link>
-                    <Link href="/dashboard" className={`hover:text-red-500 ${pathname === "/dashboard" ? "text-red-500" : ""}`}>Dashboard</Link>
-                    <Link href="/signup" className={` hover:text-red-500 ${pathname === "/signup" ? "text-red-500" : ""}`}>SignUp</Link>
+                    <Link href="/news" className={`hover:text-red-500 ${pathname === "/news" ? "text-red-500" : ""}`}>News</Link>
+                    {/* <Link href="/dashboard" className={`hover:text-red-500 ${pathname === "/dashboard" ? "text-red-500" : ""}`}>Dashboard</Link> */}
+                    <Link href="/about" className={` hover:text-red-500 ${pathname === "/about" ? "text-red-500" : ""}`}>About</Link>
+                    {user ? <Link href="/dashboard" className={` hover:text-red-500 ${pathname === "/dashboard" ? "text-red-500" : ""}`}>Dashboard</Link> : <Link href="/signin" className={` hover:text-red-500 ${pathname === "/signin" ? "text-red-500" : ""}`}>Sign In</Link>}
                     <ModeToggle />
                 </div>
                 <div className={`xl:hidden p-[50px] `} onClick={() => { setisOpen((prev) => !prev) }}>
@@ -54,6 +58,7 @@ const Navbar = () => {
 
                 </div>
             </div>
+
 
 
             {isOpen ? (

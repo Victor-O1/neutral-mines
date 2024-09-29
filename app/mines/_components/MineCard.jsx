@@ -21,14 +21,52 @@ import {
 } from "@/components/ui/select"
 import Image from "next/image"
 import Map from "./maps"
+import { GoogleGenerativeAI } from "@google/generative-ai"
 
 
 
 export function MineCard({ mines }) {
+    let Description = { s: "" };
+    // React.useEffect(() => {
+    try {
+        const genAI = new GoogleGenerativeAI("AIzaSyCol8TZzA2TzqF-c5gxLrzZj3qTFdJVz-Q");
+        async function run() {
+            if (Description == "") {
+                const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+                const prompt = `Write a description about the mine ${mines.Mine_Name} in about 3 to 4 sentences`
+                const result = await model.generateContent(prompt);
+                const response = await result.response;
+                const text = response.text();
+                let nl = JSON.stringify(text);
+                // nl = nl.replace(/javascript/g, "").replace(/json/g, "").replace(/```/g, "");
+                // nl = JSON.parse(nl)
+
+                console.log(nl);
+                console.log("JSON parse success: ")
+                console.log(JSON.parse(nl));
+                // console.log(JSON.parse(nl).calories);
+                // setnutritional(JSON.parse(nl))
+                // setcalo((prev) => prev + JSON.parse(nl).calories * servings)
+                // setFoodList((prev) => [...prev, { food, servings }]);
+                // setfood("");
+                // setservings(1);
+                Description.s = nl;
+            }
+        }
+        run();
+
+
+
+    } catch (error) {
+        console.error("Error occurred:", error);
+    }
+
+
 
     return (
         // <div className="p-3">
         <Card className="w-full p-5 grid grid-flow-col  grid-cols-2 gap-3">
+            {/* {JSON.stringify(mines)} */}
             <CardHeader>
                 <CardTitle className="text-5xl">{mines.Mine_Name}</CardTitle>
                 <CardDescription className="text-2xl">{mines.State}</CardDescription>

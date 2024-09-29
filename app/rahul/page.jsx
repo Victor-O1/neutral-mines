@@ -29,7 +29,7 @@ const Rahul = () => {
     return (
 
         <div className="w-full h-screen flex justify-center items-center">
-            <iframe
+            {/* <iframe
                 title="Power BI Report"
                 width="1800"
                 height="1300"
@@ -37,7 +37,10 @@ const Rahul = () => {
                 src={`${baseUrl}&pageName=${"Page 1"}`}
                 frameBorder="0"
                 allowFullScreen={true}>
-            </iframe>
+            </iframe> */}
+            <iframe
+                title="SIH app final" width="1800" height="900" src="https://app.powerbi.com/reportEmbed?reportId=aba18c6e-0b54-4ffa-8f55-39a8fe512876&autoAuth=true&ctid=d4963ce2-af94-4122-95a9-644e8b01624d" frameborder="0" allowFullScreen="true"></iframe>
+            {/* <iframe title="SIH app final" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=aba18c6e-0b54-4ffa-8f55-39a8fe512876&autoAuth=true&ctid=d4963ce2-af94-4122-95a9-644e8b01624d" frameborder="0" allowFullScreen="true"></iframe> */}
             {/* <iframe
                 title="Power BI Report"
                 width="1920"

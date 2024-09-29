@@ -2,40 +2,67 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import Detail from './_components/Detail';
-import { Chart } from './_components/Chart';
 import Cookies from 'js-cookie';
+import axios from 'axios';
+import Chart from './_components/Chart';
 
+const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+};
 
-const user = {
-    id: "USER12345678",
-    name: "Priyesh Kumar Jha",
-    companyName: "GreenCoal Plant",
-    location: {
-        place: "Bangalore, India",
-        coordinates: [12.9716, 77.5946] // Bangalore, India (longitude, latitude)
-    },
-    governmentId: "GOV12345678",
-    environmentalLicenseNumber: "ELN98765432",
-    createdAt: "2024-09-08T10:15:30.000Z",
-    updatedAt: "2024-09-08T10:15:30.000Z"
-}
 
 
 export default function Dashboard() {
 
+    const [userData, setUserData] = useState(null);
+    const [error, setError] = useState(null);
 
-    // const token = Cookies.get('token');
-    // const userName = Cookies.get('userName');
-    // console.log(userName.name)
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                // Read _id from the cookie
+                const userId = Cookies.get('_id');
+
+                if (!userId) {
+                    throw new Error('User ID not found in cookies');
+                }
+
+                // Send a GET request to the API with the _id
+                const response = await axios.get(`http://localhost:3000/api/userId`, {
+                    params: { id: userId }, // Send _id as query parameter
+                });
+                console.log("response.data", response.data)
+
+                // Store the user data in state
+                setUserData(response.data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                setError(error.message);
+            }
+        };
+
+        fetchUserData();
+    }, []);
+
+    if (error) {
+        return <p>Error: {error}</p>;
+    }
+
+    if (!userData) {
+        return <p>Loading...</p>;
+    }
+
+
 
     return (
         <div >
             {/* <div>{JSON.stringify(userName.name)}</div> */}
-            <Detail user={user} />
+            <Detail user={userData} />
             {/* // <div style={{ width: '100%', height: 400 }}> */}
-            <Chart />
+            <Chart user={userData} />
             {/* // </div> */}
         </div>
     );
 };
-

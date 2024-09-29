@@ -24,7 +24,7 @@ const MiniCard2 = async ({ mines }) => {
                 <div className="text-gray-500 pb-1">
                     {mines.State}
                 </div>
-                <div className="flex gap-4">
+                <div className="flex flex-col lg:flex-row gap-4">
 
                     <div className=" rounded-xl  overflow-clip">
                         <Image src={`/minespics/${mines.Mine_ID}.jpg`} width={500} height={200} alt="mine1" />
@@ -36,8 +36,8 @@ const MiniCard2 = async ({ mines }) => {
                         {/* <div className="flex flex-col gap-1 border p-3 rounded-md"><div className="text-red-500">Fugitive Emissions</div><div>{mines.Fugitive_Emissions}</div></div> */}
                     </div>
                     <div className=" flex flex-col gap-1">
-                        <div className=" flex flex-col gap-1 border p-3 rounded-md"><div className="text-red-500">Methane Emissions</div><div>{mines.Methane_Emissions}</div></div>
-                        <div className=" flex flex-col gap-1 border p-3 rounded-md"><div className="text-red-500">CO<sub>2</sub> Emissions </div><div>{mines.CO2_Emissions}</div></div>
+                        <div className=" flex flex-col gap-1 border p-3 rounded-md"><div className="text-red-500">Fugitive Emissions</div><div>{mines.Fugitive_Emissions}</div></div>
+                        <div className=" flex flex-col gap-1 border p-3 rounded-md"><div className="text-red-500">Coal Production  </div><div>{mines.Coal_Production}</div></div>
                         {/* <div className="flex flex-col gap-1 border p-3 rounded-md"><div className="text-red-500">Fugitive Emissions</div><div>{mines.Fugitive_Emissions}</div></div> */}
                     </div>
                 </div>

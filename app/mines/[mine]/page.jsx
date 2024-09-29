@@ -1,5 +1,4 @@
 
-"use client"
 import React from 'react'
 import { MineCard } from '../_components/MineCard'
 // import { useParams } from 'next/navigation'
